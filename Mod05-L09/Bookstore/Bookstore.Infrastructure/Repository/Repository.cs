@@ -9,22 +9,24 @@ using System.Transactions;
 using Bookstore.Domain.Models;
 using Bookstore.Domain.Interfaces;
 
-namespace BBookstore.Infrastructure.Repository
+namespace Bookstore.Infrastructure.Repository
 {
-  public class InMemoryRepository<T> : IRepository<T> where T : IBaseItem
+  public class Repository<T> : IRepository<T> where T : IBaseItem
   {
     private List<T> _list;
 
-    public InMemoryRepository()
+    public Repository()
     {
       _list = new List<T>();
     }
 
-    public void Add(T t)
+    public int Add(T t)
     {
       int id = GenerateNewId();
       t.Id = id;
       _list.Add(t);
+
+      return id;  
     }
 
     public T Read(int id)
@@ -68,7 +70,7 @@ namespace BBookstore.Infrastructure.Repository
       return idList;
     }
 
-    public bool ItemListIsEmpty()
+    public bool RepositoryIsEmpty()
     {
       return _list.Count == 0;
     }
@@ -77,7 +79,7 @@ namespace BBookstore.Infrastructure.Repository
 
     public T FindItemById(int id)
     {
-      T itemFound = default;
+      T? itemFound = default;
       bool found = false;
       foreach (T t in _list)
       {
@@ -135,5 +137,9 @@ namespace BBookstore.Infrastructure.Repository
       return newId;
     }
 
+    public int GetItemId(T t)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

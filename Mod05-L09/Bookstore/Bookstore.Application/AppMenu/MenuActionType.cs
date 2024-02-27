@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Bookstore.Application
 {
+  public enum MenuActionDEMO
+  {
+    AddBook = 11,
+    ReadBookDetails = 12
+  }
+
   public enum MenuActionType
   {
     AddBook = 11,

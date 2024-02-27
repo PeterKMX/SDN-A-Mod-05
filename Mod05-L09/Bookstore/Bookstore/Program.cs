@@ -1,4 +1,4 @@
-﻿// Bookstore version: 5.1.0.1
+﻿// Bookstore version: v.5.2.6.25
 
 using System.Reflection;
 

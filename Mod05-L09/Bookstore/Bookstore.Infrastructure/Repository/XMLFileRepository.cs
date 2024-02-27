@@ -63,13 +63,14 @@ namespace Bookstore.Infrastructure.Repository
     {
       dataList = new List<T>();
     }
-    public void Add(T t)
+    public int Add(T t)
     {
       ReadFromDisk(); 
       int id = GenerateNewId();
       t.Id = id;
       dataList.Add(t);
-      SaveToDisk(); 
+      SaveToDisk();
+      return id;
     }
     public T Read(int id)
     {
@@ -113,7 +114,7 @@ namespace Bookstore.Infrastructure.Repository
 
       return idList;
     }
-    public bool ItemListIsEmpty()
+    public bool RepositoryIsEmpty()
     {
       ReadFromDisk();
       return dataList.Count == 0;

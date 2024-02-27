@@ -8,12 +8,12 @@ namespace Bookstore.Domain.Interfaces
 {
   public interface IItemService<T>
   {
-    public void Add(T t);
+    public int Add(T t);
     public T Read(int Id);
     public List<T> ReadAll();
     public void Update(int Id, T t);
     public void Delete(int Id);
     public List<int> GetIdList();
-    public bool ItemListIsEmpty();
+    public bool RepositoryIsEmpty();
   }
 }

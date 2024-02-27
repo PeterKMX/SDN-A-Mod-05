@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bookstore.Application.AppActions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,23 +9,21 @@ namespace Bookstore.Application.Interfaces
 {
   public interface IActionService
   {
-    // these actions are a mapping from the use cases 
-    // supported by the application 
-
-    // - Book actions
-    void OnAddBook();
-    void OnReadBookDetails();
-    void OnEditBook();
-    void OnDeleteBook();
-    void OnShowBooksList();
-    void OnAutogenBooksList();
+    // Application use cases 
+    // Book actions
+    IActionResult OnAddBook();
+    IActionResult OnReadBookDetails();
+    IActionResult OnEditBook();
+    IActionResult OnDeleteBook();
+    IActionResult OnShowBooksList();
+    IActionResult OnAutogenBooksList();
 
     // - Journal actions
-    void OnAddJournal();
-    void OnReadJournalDetails();
-    void OnEditJournal();
-    void OnDeleteJournal();
-    void OnShowJournalList();
-    void OnAutogenJournalList();
+    IActionResult OnAddJournal();
+    IActionResult OnReadJournalDetails();
+    IActionResult OnEditJournal();
+    IActionResult OnDeleteJournal();
+    IActionResult OnShowJournalList();
+    IActionResult OnAutogenJournalList();
   }
 }

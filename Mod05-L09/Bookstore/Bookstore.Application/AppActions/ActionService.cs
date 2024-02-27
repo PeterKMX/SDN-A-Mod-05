@@ -11,71 +11,76 @@ namespace Bookstore.Application.AppActions
 {
   public class ActionService : IActionService
   {
-    ItemService<Book> _itemServiceBook;
-    ItemService<JournalIssue> _itemServiceJournal;
+    ItemService<Book> _bookService;
+    ItemService<JournalIssue> _journalService;
 
     VMActionsBook _vmBookActions;
     VMActionsJournal _vmJournalActions;
 
     public ActionService(
-    ItemService<Book> itemServiceB,
-    ItemService<JournalIssue> itemServiceJ)
+    ItemService<Book> bookService,
+    ItemService<JournalIssue> journalService)
     {
-      _itemServiceBook = itemServiceB;
-      _itemServiceJournal = itemServiceJ;
+      _bookService = bookService;
+      _journalService = journalService;
 
       _vmBookActions = new VMActionsBook();
       _vmJournalActions = new VMActionsJournal();
     }
 
     // Book
-    public void OnAddBook()
+    public IActionResult OnAddBook()
     {
       Book newBook = _vmBookActions.Create();
-      _itemServiceBook.Add(newBook);
+      _bookService.Add(newBook);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" }; 
     }
-    public void OnReadBookDetails()
+    public IActionResult OnReadBookDetails()
     {
-      if (_itemServiceBook.ItemListIsEmpty())
+      if (_bookService.RepositoryIsEmpty())
       {
         Console.WriteLine("[Backend list is empty]");
-        return;
+        return new ActionResult { IsSuccess = false, ResultMessage = "" };
       }
 
-      List<int> validIds = _itemServiceBook.GetIdList();
+      List<int> validIds = _bookService.GetIdList();
       int id = _vmBookActions.SelectId(validIds);
-      Book book = _itemServiceBook.Read(id);
+      Book book = _bookService.Read(id);
       _vmBookActions.Show(book);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnEditBook()
+    public IActionResult OnEditBook()
     {
-      List<int> validIds = _itemServiceBook.GetIdList();
+      List<int> validIds = _bookService.GetIdList();
       int id = _vmBookActions.SelectId(validIds);
-      Book book = _itemServiceBook.Read(id);
+      Book book = _bookService.Read(id);
 
       Book bookUpdate = _vmBookActions.Edit(book);
-      _itemServiceBook.Update(id, bookUpdate);
+      _bookService.Update(id, bookUpdate);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnDeleteBook()
+    public IActionResult OnDeleteBook()
     {
-      if (_itemServiceBook.ItemListIsEmpty())
+      if (_bookService.RepositoryIsEmpty())
       {
         Console.WriteLine("[Backend list is empty]");
-        return;
+        return new ActionResult { IsSuccess = false, ResultMessage = "" };
       }
 
-      List<int> validIds = _itemServiceBook.GetIdList();
+      List<int> validIds = _bookService.GetIdList();
       int id = _vmBookActions.SelectId(validIds);
-      _itemServiceBook.Delete(id);
+      _bookService.Delete(id);
 
       Console.WriteLine("[DONE]");
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnShowBooksList()
+    public IActionResult OnShowBooksList()
     {
-      List<Book> list = _itemServiceBook.ReadAll();
+      List<Book> list = _bookService.ReadAll();
       _vmBookActions.ShowList(list);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnAutogenBooksList()
+    public IActionResult OnAutogenBooksList()
     {
       Console.WriteLine("[Adding 3 books...]");
 
@@ -86,77 +91,84 @@ namespace Bookstore.Application.AppActions
       book.Authors = "Anders Hejlsberg";
       book.Publisher = "Wiley";
       book.Year = 2014;
-      _itemServiceBook.Add(book);
+      _bookService.Add(book);
 
       book = new Book();
       book.Title = "Beginning gRPC with ASP.NET Core 6";
       book.Authors = "Anthony Giretti";
       book.Publisher = "Apress";
       book.Year = 2022;
-      _itemServiceBook.Add(book);
+      _bookService.Add(book);
 
       book = new Book();
       book.Title = "Learn PHP 8";
       book.Authors = "Steve Prettyman";
       book.Publisher = "Apress";
       book.Year = 2020;
-      _itemServiceBook.Add(book);
+      _bookService.Add(book);
+
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
 
     // Journal
-    public void OnAddJournal()
+    public IActionResult OnAddJournal()
     {
       JournalIssue journalIssue = _vmJournalActions.Create();
-      _itemServiceJournal.Add(journalIssue);
+      _journalService.Add(journalIssue);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnReadJournalDetails()
+    public IActionResult OnReadJournalDetails()
     {
-      if (_itemServiceJournal.ItemListIsEmpty())
+      if (_journalService.RepositoryIsEmpty())
       {
         Console.WriteLine("[Backend list is empty]");
-        return;
+        return new ActionResult { IsSuccess = false, ResultMessage = "" };
       }
 
-      List<int> validIDs = _itemServiceJournal.GetIdList();
+      List<int> validIDs = _journalService.GetIdList();
       int id = _vmJournalActions.SelectId(validIDs);
-      JournalIssue issue = _itemServiceJournal.Read(id);
+      JournalIssue issue = _journalService.Read(id);
       _vmJournalActions.Show(issue);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnEditJournal()
+    public IActionResult OnEditJournal()
     {
-      if (_itemServiceJournal.ItemListIsEmpty())
+      if (_journalService.RepositoryIsEmpty())
       {
         Console.WriteLine("[Backend list is empty]");
-        return;
+        return new ActionResult { IsSuccess = false, ResultMessage = "" };
       }
 
-      List<int> validIDs = _itemServiceJournal.GetIdList();
+      List<int> validIDs = _journalService.GetIdList();
       int id = _vmJournalActions.SelectId(validIDs);
-      JournalIssue issue = _itemServiceJournal.Read(id);
+      JournalIssue issue = _journalService.Read(id);
 
       JournalIssue editedIssue = _vmJournalActions.Edit(issue);
-      _itemServiceJournal.Update(id, editedIssue);
+      _journalService.Update(id, editedIssue);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnDeleteJournal()
+    public IActionResult OnDeleteJournal()
     {
-      if (_itemServiceJournal.ItemListIsEmpty())
+      if (_journalService.RepositoryIsEmpty())
       {
         Console.WriteLine("[Backend list is empty]");
-        return;
+        return new ActionResult { IsSuccess = false, ResultMessage = "" };
       }
 
-      List<int> validIDs = _itemServiceJournal.GetIdList();
+      List<int> validIDs = _journalService.GetIdList();
       int id = _vmJournalActions.SelectId(validIDs);
-      _itemServiceJournal.Delete(id);
+      _journalService.Delete(id);
 
       Console.WriteLine("[DONE]");
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnShowJournalList()
+    public IActionResult OnShowJournalList()
     {
-      List<JournalIssue> issues = _itemServiceJournal.ReadAll();
+      List<JournalIssue> issues = _journalService.ReadAll();
       _vmJournalActions.ShowList(issues);
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-    public void OnAutogenJournalList()
+    public IActionResult OnAutogenJournalList()
     {
       JournalIssue issue = null;
 
@@ -165,24 +177,24 @@ namespace Bookstore.Application.AppActions
       issue.Year = 2019;
       issue.Vol = 34;
       issue.Nr = 1;
-      _itemServiceJournal.Add(issue);
+      _journalService.Add(issue);
 
       issue = new JournalIssue();
       issue.Name = "MSDN Magazine";
       issue.Year = 2019;
       issue.Vol = 34;
       issue.Nr = 2;
-      _itemServiceJournal.Add(issue);
+      _journalService.Add(issue);
 
       issue = new JournalIssue();
       issue.Name = "MSDN Magazine";
       issue.Year = 2019;
       issue.Vol = 34;
       issue.Nr = 3;
-      _itemServiceJournal.Add(issue);
+      _journalService.Add(issue);
 
       Console.WriteLine("[DONE]");
+      return new ActionResult { IsSuccess = true, ResultMessage = "" };
     }
-
   }
 }
